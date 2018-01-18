@@ -1,19 +1,56 @@
-import React from 'react';
-import Board from './Board.js';
+import React, { Component } from 'react'
+import Human from './Human'
+import AI from './AI'
 
+export default class Game extends Component {
+    constructor() {
+        super()
+        this.state = {
+            gameType: ''
+        }
 
-export default class Game extends React.Component {
+    }
+
+    clickHandler = (e) => {
+        this.setState({
+            gameType: e.target.value
+        })
+    }
+
+    onClick = () => {
+        this.setState({
+            gameType: ''
+        })
+    }
+
     render() {
-        return (
-            <div className="game">
-                <div className="game-board">
-                    <Board />
+        if (this.state.gameType === 'Human') {
+            return (
+                <div className='Game'>
+                    <Human />
+                    <button onClick={this.onClick}>{'Back to menu'}</button>
                 </div>
-                <div className="game-info">
-                    <div>{/* status */}</div>
-                    <ol>{/* TODO */}</ol>
+            )
+        } else if (this.state.gameType === 'AI') {
+            return (
+                <div className='Game'>
+                    <AI />
+                    <button onClick={this.onClick}>{'Back to menu'}</button>
+                </div>
+            )
+        }
+        return (
+            <div className='choose-game-type'>
+                <h1>{'How would you like to play?'}</h1>
+                <div className='buttons'>
+                    <button onClick={this.clickHandler} value='AI'>{'One Player'}</button>
+                    <button onClick={this.clickHandler} value='Human'>{'Two Players'}</button>
                 </div>
             </div>
-        );
+        )
+
     }
 }
+
+
+

@@ -1,26 +1,30 @@
-import React from 'react';
-import Square from './Square.js';
+import React, { Component } from 'react'
+import Square from './Square'
+import Result from './Result'
 
-export default class Board extends React.Component {
+export default class Board extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             squares: Array(9).fill(null),
             xIsNext: true,
-        };
+            firstPlayer: this.props.value,
+
+        }
     }
 
     renderSquare(i) {
         return (
             <Square
                 value={this.state.squares[i]}
-                onClick={() => this.handleCLick(i)}
+                onClick={() => this.handleClick(i)}
             />
         );
     }
 
-    handleCLick(i) {
-        const squares = this.state.squares.slice();
+    handleClick(i) {
+        const squares = this.state.squares.slice()
+
         if (calculateWinner(squares) || squares[i]) {
             return;
         }
@@ -31,32 +35,51 @@ export default class Board extends React.Component {
         });
     }
 
+    componentDidMount() {
+        if (this.state.firstPlayer === 'O') {
+            this.setState({
+                xIsNext: false
+            })
+        }
+    }
+
     render() {
-        const winner = calculateWinner(this.state.squares);
-        let status;
+        const winner = calculateWinner(this.state.squares)
+        let status
+        let results
+        const gameOver = theEnd(this.state.squares)
+
         if (winner) {
-            status = 'Winner: ' + winner;
+            results = 'Winner: ' + winner
+            status = <Result value={results} />
         } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            if (gameOver) {
+                results = 'It was a draw'
+                status = <Result value={results} />
+            } else {
+                status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
+            }
         }
 
         return (
-            <div>
-                <div className="status">{status}</div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
+            <div className="game-board">
+                <div className="status"><h1>{status}</h1></div>
+                <div className="board">
+                    <div className="board-row">
+                        {this.renderSquare(0)}
+                        {this.renderSquare(1)}
+                        {this.renderSquare(2)}
+                    </div>
+                    <div className="board-row">
+                        {this.renderSquare(3)}
+                        {this.renderSquare(4)}
+                        {this.renderSquare(5)}
+                    </div>
+                    <div className="board-row">
+                        {this.renderSquare(6)}
+                        {this.renderSquare(7)}
+                        {this.renderSquare(8)}
+                    </div>
                 </div>
             </div>
         );
@@ -75,10 +98,19 @@ function calculateWinner(squares) {
         [2, 4, 6],
     ];
     for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
+        const [a, b, c] = lines[i]
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return squares[a]
         }
     }
     return null;
+}
+
+function theEnd(squares) {
+    for (let square of squares) {
+        if (square !== 'X' && square !== 'O') {
+            return false
+        }
+    }
+    return true
 }
