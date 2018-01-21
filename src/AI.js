@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Board from './Board'
 import Player from './Player'
 
-export default class Human extends Component {
+export default class AI extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -43,3 +43,6 @@ export default class Human extends Component {
         }
     }
 }
+
+
+

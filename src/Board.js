@@ -9,7 +9,7 @@ export default class Board extends Component {
             squares: Array(9).fill(null),
             xIsNext: true,
             firstPlayer: this.props.value,
-
+            gameType: this.props.type
         }
     }
 
@@ -22,17 +22,32 @@ export default class Board extends Component {
         );
     }
 
-    handleClick(i) {
-        const squares = this.state.squares.slice()
-
+    handleClick = (i) => {
+        let squares = [...this.state.squares];
         if (calculateWinner(squares) || squares[i]) {
-            return;
+            return
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = this.state.xIsNext ? 'X' : 'O'
         this.setState({
-            squares: squares,
+            squares,
             xIsNext: !this.state.xIsNext,
-        });
+        })
+
+        if (this.state.gameType === 'AI') {
+            if (this.state.firstPlayer === 'X') {
+                const best = maximize(squares);
+                squares[best[1]] = 'O'
+                this.setState({
+                    xIsNext: true
+                })
+            } else {
+                const best = maximize(squares);
+                squares[best[1]] = 'X'
+                this.setState({
+                    xIsNext: false
+                })
+            }
+        }
     }
 
     componentDidMount() {
@@ -82,7 +97,7 @@ export default class Board extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -114,3 +129,55 @@ function theEnd(squares) {
     }
     return true
 }
+
+const minimize = board => {
+    const moves = getAvailableSpots(board);
+    if (theEnd(board)) return 1;
+    if (!moves.length) return 0;
+    let bestMove;
+    let bestValue = Infinity;
+    for (let i = 0; i < moves.length; i++) {
+        board[moves[i]] = 'O';
+        let hValue = maximize(board);
+        if (Array.isArray(hValue)) {
+            hValue = hValue[0];
+        }
+        if (hValue < bestValue) {
+            bestMove = moves[i];
+            bestValue = hValue;
+        }
+        board[moves[i]] = null;
+    }
+    return [bestValue, bestMove];
+};
+
+const maximize = board => {
+    const moves = getAvailableSpots(board);
+    if (theEnd(board)) return -1;
+    if (!moves.length) return 0;
+    let bestMove;
+    let bestValue = -Infinity;
+    for (let i = 0; i < moves.length; i++) {
+        board[moves[i]] = 'X';
+        let hValue = minimize(board);
+        if (Array.isArray(hValue)) {
+            hValue = hValue[0];
+        }
+        if (hValue > bestValue) {
+            bestMove = moves[i];
+            bestValue = hValue;
+        }
+        board[moves[i]] = null;
+    }
+    return [bestValue, bestMove];
+};
+
+const getAvailableSpots = board => {
+    let result = [];
+    for (let i = 0; i < board.length; i++) {
+        if (!board[i]) result.push(i);
+    }
+    return result;
+};
+
+

@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default (props) => (
-    <button className="square" onClick={props.onClick}>
+    <button className="square" onClick={props.onClick} onChange={props.onChange}>
         {props.value}
     </button>
 )

@@ -13,7 +13,7 @@ export default class Result extends Component {
             this.setState({
                 status: this.props.value
             })
-        }, 1000)
+        }, 500)
     }
 
     render() {
@@ -24,13 +24,3 @@ export default class Result extends Component {
         )
     }
 }
-
-/*setTimeout(() => {
-            this.setState({
-                button: <button onClick={this.props.onClick}>{"Next Round"}</button>
-            })
-
-            {this.state.button}
-
-            button: ''
-        }, 2000)*/

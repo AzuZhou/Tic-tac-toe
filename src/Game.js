@@ -8,7 +8,6 @@ export default class Game extends Component {
         this.state = {
             gameType: ''
         }
-
     }
 
     clickHandler = (e) => {
@@ -17,7 +16,7 @@ export default class Game extends Component {
         })
     }
 
-    onClick = () => {
+    onClick() {
         this.setState({
             gameType: ''
         })
@@ -27,15 +26,15 @@ export default class Game extends Component {
         if (this.state.gameType === 'Human') {
             return (
                 <div className='Game'>
-                    <Human />
-                    <button onClick={this.onClick}>{'Back to menu'}</button>
+                    <Human type='Human' />
+                    <button onClick={() => this.onClick()}>{'Back to menu'}</button>
                 </div>
             )
         } else if (this.state.gameType === 'AI') {
             return (
                 <div className='Game'>
-                    <AI />
-                    <button onClick={this.onClick}>{'Back to menu'}</button>
+                    <AI type='AI' />
+                    <button onClick={() => this.onClick()}>{'Back to menu'}</button>
                 </div>
             )
         }
