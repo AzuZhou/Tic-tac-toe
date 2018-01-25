@@ -4,21 +4,28 @@ export default class Result extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            status: ''
+            status: '',
+            show: false
         }
     }
 
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-                status: this.props.value
+                status: this.props.value,
+                show: true
             })
-        }, 500)
+        }, 400)
     }
 
     render() {
+        let style
+        if (this.state.show) {
+            console.log('here')
+            style = 'show'
+        }
         return (
-            <h1>
+            <h1 className={style}>
                 {this.state.status}
             </h1>
         )

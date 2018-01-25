@@ -26,15 +26,15 @@ export default class Game extends Component {
         if (this.state.gameType === 'Human') {
             return (
                 <div className='game'>
-                    <Human type='Human' />
                     <button className='back' onClick={() => this.onClick()}>&larr;</button>
+                    <Human type='Human' />
                 </div>
             )
         } else if (this.state.gameType === 'AI') {
             return (
                 <div className='game'>
-                    <AI type='AI' />
                     <button className='back' onClick={() => this.onClick()}>&larr;</button>
+                    <AI type='AI' />
                 </div>
             )
         }

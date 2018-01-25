@@ -126,7 +126,7 @@ export default class Board extends Component {
         let tie = gameOver(this.state.squares)
 
         if (winner) {
-            results = 'Winner: ' + winner
+            results = 'Winner: ' + winner + '!'
             status = <Result value={results} />
         } else {
             if (tie) {

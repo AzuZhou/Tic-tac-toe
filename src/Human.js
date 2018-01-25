@@ -30,8 +30,8 @@ export default class Human extends Component {
         if (this.state.ready) {
             return (
                 <Fragment>
+                    <button className='new' onClick={() => this.onClick()}>&rarr;</button>
                     <Board value={this.state.firstPlayer} type={this.state.gameType} />
-                    <button className='new' onClick={() => this.onClick()}>{'New Game'}</button>
                 </Fragment>
             )
         } else {
