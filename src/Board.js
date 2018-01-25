@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Square from './Square'
 import Result from './Result'
 
@@ -9,8 +9,96 @@ export default class Board extends Component {
             squares: Array(9).fill(null),
             xIsNext: true,
             firstPlayer: this.props.value,
+            humanPlayer: this.props.value,
+            aiPlayer: 'O',
             gameType: this.props.type
         }
+    }
+
+    turnTimer = () => {
+        setTimeout(function () {
+            this.setState({
+                xIsNext: !this.state.xIsNext
+            })
+        }.bind(this), 400)
+    }
+
+    handleClick = (i) => {
+        let squares = [...this.state.squares]
+        if (calculateWinner(squares) || squares[i]) {
+            return
+        }
+        squares[i] = this.state.xIsNext ? 'X' : 'O'
+        if (this.state.gameType === 'AI') {
+            let index = this.minimax(squares, this.state.aiPlayer).index
+            const aiTimer = (i) => {
+                setTimeout(function () {
+                    squares[index] = i
+                }, 200)
+            }
+            if (this.state.aiPlayer === 'X') {
+                aiTimer('X')
+                this.turnTimer()
+            } else {
+                aiTimer('O')
+                this.turnTimer()
+            }
+        }
+        this.setState({
+            squares,
+            xIsNext: !this.state.xIsNext,
+        })
+    }
+
+    minimax = (newBoard, player) => {
+        let winning = calculateWinner(newBoard)
+        let availableSpots = getAvailableSpots(newBoard)
+
+        if (winning === this.state.humanPlayer) {
+            return { score: -10 }
+        }
+        else if (winning === this.state.aiPlayer) {
+            return { score: 10 }
+        }
+        else if (availableSpots.length === 0) {
+            return { score: 0 }
+        }
+
+        let moves = []
+        for (let i of availableSpots) {
+            let move = {}
+            move.index = i
+            newBoard[i] = player
+            if (player === this.state.aiPlayer) {
+                let result = this.minimax(newBoard, this.state.humanPlayer)
+                move.score = result.score
+            } else {
+                let result = this.minimax(newBoard, this.state.aiPlayer)
+                move.score = result.score
+            }
+            newBoard[i] = null
+            moves.push(move)
+        }
+
+        let bestMove
+        if (player === this.state.aiPlayer) {
+            let bestScore = -10000
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score > bestScore) {
+                    bestScore = moves[i].score
+                    bestMove = i
+                }
+            }
+        } else {
+            let bestScore = 10000
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score < bestScore) {
+                    bestScore = moves[i].score
+                    bestMove = i
+                }
+            }
+        }
+        return moves[bestMove]
     }
 
     renderSquare(i) {
@@ -22,82 +110,56 @@ export default class Board extends Component {
         );
     }
 
-    handleClick = (i) => {
-        let squares = [...this.state.squares];
-        if (calculateWinner(squares) || squares[i]) {
-            return
-        }
-        squares[i] = this.state.xIsNext ? 'X' : 'O'
-        this.setState({
-            squares,
-            xIsNext: !this.state.xIsNext,
-        })
-
-        if (this.state.gameType === 'AI') {
-            if (this.state.firstPlayer === 'X') {
-                const best = maximize(squares);
-                squares[best[1]] = 'O'
-                this.setState({
-                    xIsNext: true
-                })
-            } else {
-                const best = maximize(squares);
-                squares[best[1]] = 'X'
-                this.setState({
-                    xIsNext: false
-                })
-            }
-        }
-    }
-
     componentDidMount() {
         if (this.state.firstPlayer === 'O') {
             this.setState({
-                xIsNext: false
+                xIsNext: false,
+                aiPlayer: 'X'
             })
         }
     }
 
     render() {
-        const winner = calculateWinner(this.state.squares)
+        let winner = calculateWinner(this.state.squares)
         let status
         let results
-        const gameOver = theEnd(this.state.squares)
+        let tie = gameOver(this.state.squares)
 
         if (winner) {
             results = 'Winner: ' + winner
             status = <Result value={results} />
         } else {
-            if (gameOver) {
+            if (tie) {
                 results = 'It was a draw'
                 status = <Result value={results} />
             } else {
-                status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
+                status = <h1>{'Next player: ' + (this.state.xIsNext ? 'X' : 'O')}</h1>
             }
         }
 
         return (
-            <div className="game-board">
-                <div className="status"><h1>{status}</h1></div>
+            <Fragment>
+                <div className="status">{status}</div>
                 <div className="board">
-                    <div className="board-row">
+                    <div className="row">
                         {this.renderSquare(0)}
                         {this.renderSquare(1)}
                         {this.renderSquare(2)}
                     </div>
-                    <div className="board-row">
+                    <div className="row">
                         {this.renderSquare(3)}
                         {this.renderSquare(4)}
                         {this.renderSquare(5)}
                     </div>
-                    <div className="board-row">
+                    <div className="row">
                         {this.renderSquare(6)}
                         {this.renderSquare(7)}
                         {this.renderSquare(8)}
                     </div>
                 </div>
-            </div>
+            </Fragment>
         )
+
     }
 }
 
@@ -121,7 +183,7 @@ function calculateWinner(squares) {
     return null;
 }
 
-function theEnd(squares) {
+function gameOver(squares) {
     for (let square of squares) {
         if (square !== 'X' && square !== 'O') {
             return false
@@ -130,54 +192,16 @@ function theEnd(squares) {
     return true
 }
 
-const minimize = board => {
-    const moves = getAvailableSpots(board);
-    if (theEnd(board)) return 1;
-    if (!moves.length) return 0;
-    let bestMove;
-    let bestValue = Infinity;
-    for (let i = 0; i < moves.length; i++) {
-        board[moves[i]] = 'O';
-        let hValue = maximize(board);
-        if (Array.isArray(hValue)) {
-            hValue = hValue[0];
+function getAvailableSpots(board) {
+    let indexFinder = 0
+    let spots = []
+    for (let spot of board) {
+        indexFinder++
+        if (spot !== "O" && spot !== "X") {
+            spots.push(indexFinder - 1)
         }
-        if (hValue < bestValue) {
-            bestMove = moves[i];
-            bestValue = hValue;
-        }
-        board[moves[i]] = null;
     }
-    return [bestValue, bestMove];
-};
-
-const maximize = board => {
-    const moves = getAvailableSpots(board);
-    if (theEnd(board)) return -1;
-    if (!moves.length) return 0;
-    let bestMove;
-    let bestValue = -Infinity;
-    for (let i = 0; i < moves.length; i++) {
-        board[moves[i]] = 'X';
-        let hValue = minimize(board);
-        if (Array.isArray(hValue)) {
-            hValue = hValue[0];
-        }
-        if (hValue > bestValue) {
-            bestMove = moves[i];
-            bestValue = hValue;
-        }
-        board[moves[i]] = null;
-    }
-    return [bestValue, bestMove];
-};
-
-const getAvailableSpots = board => {
-    let result = [];
-    for (let i = 0; i < board.length; i++) {
-        if (!board[i]) result.push(i);
-    }
-    return result;
-};
+    return spots
+}
 
 

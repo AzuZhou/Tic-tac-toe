@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 export default class Result extends Component {
     constructor(props) {
@@ -18,9 +18,9 @@ export default class Result extends Component {
 
     render() {
         return (
-            <Fragment>
+            <h1>
                 {this.state.status}
-            </Fragment>
+            </h1>
         )
     }
 }

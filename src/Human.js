@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Board from './Board'
 import Player from './Player'
 
@@ -29,16 +29,16 @@ export default class Human extends Component {
     render() {
         if (this.state.ready) {
             return (
-                <div className="game">
+                <Fragment>
                     <Board value={this.state.firstPlayer} type={this.state.gameType} />
-                    <button onClick={() => this.onClick()}>{'New Game'}</button>
-                </div>
+                    <button className='new' onClick={() => this.onClick()}>{'New Game'}</button>
+                </Fragment>
             )
         } else {
             return (
-                <div className="game">
+                <Fragment>
                     <Player onClick={this.clickHandler} />
-                </div>
+                </Fragment>
             )
         }
     }
