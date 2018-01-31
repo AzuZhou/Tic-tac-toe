@@ -22,19 +22,19 @@
     margin-top: 2vh;
     height: 18vh;
     overflow: hidden;
-    font-size: 3vw;
+    font-size: 2vw;
   }
 
   .show {
-    font-size: 9vw;
+    font-size: 6vw;
     color: #0066cc;
     transition-duration: .5s;
     transition-timing-function: ease-out;
   }
 
   .board {
-    width: 57vw;
-    height: 57vw;
+    width: 70vh;
+    height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,15 +51,14 @@
   
   .square {
     border: 2px solid #0066cc;
-    font-size: 6vw;
-    border-radius: 4vw;
+    border-radius: 3vw;
     text-align: center;
-    height: 17vw;
-    width: 17vw;
+    height: 20vh;
+    width: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12vw;
+    font-size: 9vw;
   }
   
   .square:focus {
@@ -103,11 +102,11 @@
 
 .pick button {
     color: #0066cc;
-    width: 14vw;
-    height: 14vw;
+    width: 10vw;
+    height: 10vw;
     border: 1px solid #0066cc;
     border-radius: 25vw;
-    font-size: 8vw;
+    font-size: 6vw;
   }
 
   .back, .new {
@@ -147,10 +146,10 @@
   }
 
 .choose-game-type button {
-    width: 32vw;
+    width: 25vw;
     height: 12vh;
     border: 1px solid #0066cc;
-    border-radius: 3vw;
+    border-radius: 2vw;
     font-size: 4vw;
     color: #0066cc;
   }
