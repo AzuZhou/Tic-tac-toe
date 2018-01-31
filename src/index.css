@@ -8,6 +8,10 @@
     align-items: center;
   }
 
+  button:hover {
+    cursor: pointer;
+  }
+
   * {
     padding: 0;
     margin: 0;
@@ -15,21 +19,22 @@
   }
   
   .status {
+    margin-top: 2vh;
     height: 18vh;
     overflow: hidden;
-    font-size: 40px;
+    font-size: 3vw;
   }
 
   .show {
-    font-size: 120px;
+    font-size: 9vw;
     color: #0066cc;
     transition-duration: .5s;
     transition-timing-function: ease-out;
   }
 
   .board {
-    width: 65vw;
-    height: 70vh;
+    width: 57vw;
+    height: 57vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,20 +46,20 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    height: 33%;
+    height: 33.33vw;
   }
   
   .square {
     border: 2px solid #0066cc;
-    font-size: 170px;
-    border-radius: 40px;
+    font-size: 6vw;
+    border-radius: 4vw;
     text-align: center;
-    height: 90%;
-    width: 28%;
+    height: 17vw;
+    width: 17vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 150px;
+    font-size: 12vw;
   }
   
   .square:focus {
@@ -70,8 +75,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 90vh;
-  width: 80vw;
+  height: 100vh;
+  width: 100vw;
   text-align: center;
 }
 
@@ -81,68 +86,123 @@
     align-items: center;
     flex-direction: column;
     height: 60vh;
-    width: 60vw;
-    font-size: 40px;
+    width: 80vw;
+    font-size: 2.5vw;
+  }
+
+.pick h1 {
+  width: 100%;
   }
 
 .pick .options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 50vw;
+    width: 40vw;
   }
 
 .pick button {
     color: #0066cc;
-    width: 170px;
-    height: 170px;
+    width: 14vw;
+    height: 14vw;
     border: 1px solid #0066cc;
-    border-radius: 100px;
-    font-size: 90px;
+    border-radius: 25vw;
+    font-size: 8vw;
   }
 
   .back, .new {
     border: none;
-    height: 60px;
-    width: 150px;
-    position: fixed;
-    font-size: 100px;
-    top: 10px;
+    height: 6vw;
+    width: 10vw;
+    position: absolute;
+    font-size: 8vw;
+    top: 1vh;
   }
   
   .back {
-    left: 40px;
+    left: 8vw;
   }
   
   .new {
-    right: 40px;
+    right: 8vw;
   }
     
 .choose-game-type {
     height: 50vh;
     width: 80vw;
-    font-size: 70px;
   }
 
 .choose-game-type .buttons {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 50vh;
-    width: 80vw;
+    height: 100%;
+    width: 100%;
   }
 
 .choose-game-type h1 {
     width: 100%;
     text-align: center;
-    font-size: 70px;
+    font-size: 5vw;
   }
 
 .choose-game-type button {
-    width: 370px;
-    height: 120px;
+    width: 32vw;
+    height: 12vh;
     border: 1px solid #0066cc;
-    border-radius: 30px;
-    font-size: 55px;
+    border-radius: 3vw;
+    font-size: 4vw;
     color: #0066cc;
   }
+
+@media screen and (max-width: 425px) {
+
+.choose-game-type h1 {
+    font-size: 8vw;
+  }
+
+.choose-game-type button {
+    width: 32vw;
+    height: 8vh;
+    font-size: 5vw;
+  }
+  
+.pick {
+    font-size: 4vw;
+  }
+
+.pick .options {
+    width: 70vw;
+  }
+
+.pick button {
+    width: 24vw;
+    height: 24vw;
+    font-size: 14vw;
+  }
+
+  .status {
+    margin-top: 12vh;
+    font-size: 4.5vw;
+  }
+
+  .show {
+    font-size: 13vw;
+  }
+
+  .board {
+    width: 90vw;
+    height: 90vw;
+  }
+  
+  .square {
+    height: 28vw;
+    width: 28vw;
+    font-size: 16vw;
+  }
+
+  .back, .new {
+    font-size: 12vw;
+    top: 5vh;
+  }
+}
